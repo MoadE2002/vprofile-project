@@ -98,4 +98,10 @@ pipeline {
             }
         }
     }
+    post{
+        always {
+            echo 'Slack Notification'
+            slackSend (channel: '#jenkinscicd', message: "Build ${currentBuild.fullDisplayName} finished with status: ${currentBuild.currentResult}")
+        }
+    }
 }
