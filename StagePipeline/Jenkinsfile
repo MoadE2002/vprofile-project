@@ -103,8 +103,11 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                
                 script {
+                    // Add Jenkins user to docker group if not already added
+                    sh 'if ! groups jenkins | grep -q docker; then sudo usermod -aG docker jenkins; fi'
+                    // Reload permissions
+                    sh 'sudo chmod 666 /var/run/docker.sock'
                     dockerImage = docker.build("${appRegistry}:${BUILD_NUMBER}", "Docker-files/app/multi-stage/")
                 }
             }
